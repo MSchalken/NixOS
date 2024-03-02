@@ -1,102 +1,81 @@
-{ 
-  config, 
-  pkgs, 
-  username, 
-  nix-index-database, 
-  ... 
-}:
+{ pkgs, config, username, ... }:
 
 {
-  imports = [
-    nix-index-database.hmModules.nix-index
-  ];
-
-  home.stateVersion = "22.11";
+  home.stateVersion = "23.11";
 
   home = {
     username = "${username}";
     homeDirectory = "/home/${username}";
 
-    sessionVariables.EDITOR = "nvim";
-    sessionVariables.SHELL = "/etc/profiles/per-user/${username}/bin/zsh";
+    sessionVariables = {
+        EDITOR = "nvim";
+        SHELL = "/etc/profiles/per-user/${username}/bin/zsh";
+    };
   };
 
   home.packages = with pkgs; [
-    # key tools
+
     coreutils
     curl
     fd
     findutils
-    git
-    git-crypt
-    # neovim
     ripgrep
+    zip
     unzip
     wget
-    zip
-    gh
+    tree
+    bat
+
+    git
     just
 
-    # core languages
-    rustup
-    # go
-    lua
-    # nodejs
-    # python3
-    # typescript
+    tree-sitter
 
-    # rust stuff
-    cargo-cache
-    cargo-expand
-
-    # language servers
-    nil # nix
-
-    # formatters and linters
-    alejandra # nix
-    deadnix # nix
-    statix # nix
   ];
-
-  # home.file.".config/nvim".source = ./nvim;
 
   programs = {
     home-manager.enable = true;
-    nix-index.enable = true;
-    nix-index.enableZshIntegration = true;
-    nix-index-database.comma.enable = true;
 
-    starship.enable = true;
-    starship.settings = {
-      aws.disabled = true;
-      gcloud.disabled = true;
-      kubernetes.disabled = false;
-      git_branch.style = "242";
-      directory.style = "blue";
-      directory.truncate_to_repo = false;
-      directory.truncation_length = 8;
-      python.disabled = true;
-      ruby.disabled = true;
-      hostname.ssh_only = false;
-      hostname.style = "bold green";
+    starship = {
+      enable = true;
+      settings = {
+        git_branch.style = "242";
+        directory.style = "blue";
+        directory.truncate_to_repo = false;
+        directory.truncation_length = 8;
+        hostname.ssh_only = false;
+        hostname.style = "bold green";
+      };
     };
 
-    fzf.enable = true;
-    fzf.enableZshIntegration = true;
-    lsd.enable = true;
-    lsd.enableAliases = true;
-    zoxide.enable = true;
-    zoxide.enableZshIntegration = true;
-    broot.enable = true;
-    broot.enableZshIntegration = true;
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
+    };
 
-    direnv.enable = true;
-    direnv.enableZshIntegration = true;
-    direnv.nix-direnv.enable = true;
+    lsd = {
+      enable = true;
+      enableAliases = true;
+    };
+
+    zoxide = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
+    broot = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
+    direnv = {
+        enable = true;
+        enableZshIntegration = true;
+        nix-direnv.enable = true;
+    };
 
     git = {
       enable = true;
-      # package = pkgs.unstable.git;
       delta.enable = true;
       delta.options = {
         line-numbers = true;
@@ -105,18 +84,6 @@
       };
       userEmail = "m.m.r.schalken@gmail.com";
       userName = "MSchalken";
-      extraConfig = {
-        push = {
-          default = "current";
-          autoSetupRemote = true;
-        };
-        merge = {
-          conflictstyle = "diff3";
-        };
-        diff = {
-          colorMoved = "default";
-        };
-      };
     };
 
     neovim = {

@@ -4,7 +4,7 @@ system:
 
 let
   wsl-config = import ../module/wsl-config.nix;
-  home-manager = import ../module/home-manager.nix;
+  home-manager = import ../module/home.nix;
 in
 
 inputs.nixpkgs.lib.nixosSystem {
