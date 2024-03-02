@@ -29,7 +29,8 @@
     git
     just
 
-    tree-sitter
+    # tree-sitter
+    gcc
 
   ];
 
@@ -85,6 +86,8 @@
       userEmail = "m.m.r.schalken@gmail.com";
       userName = "MSchalken";
     };
+
+    lazygit.enable = true;
 
     neovim = {
       enable = true;
